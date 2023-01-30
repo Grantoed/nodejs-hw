@@ -1,5 +1,7 @@
 const {
   registration,
+  registrationResend,
+  verification,
   login,
   logout,
   current,
@@ -15,6 +17,21 @@ const registrationController = async (req, res) => {
     },
   });
 };
+
+const registrationResendController = async (req, res) => {
+  const { email } = req.body;
+  await registrationResend(email);
+  res.json(`New verification link was sent to ${email}`);
+};
+
+const verificationController = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  await verification(verificationToken);
+
+  res.json({ status: "User verified" });
+};
+
 const loginController = async (req, res) => {
   const { email, password } = req.body;
   const { user, token } = await login(email, password);
@@ -26,11 +43,13 @@ const loginController = async (req, res) => {
     },
   });
 };
+
 const logoutController = async (req, res) => {
   const userId = req.user._id;
   await logout(userId);
   res.sendStatus(204);
 };
+
 const currentController = async (req, res) => {
   const userId = req.user._id;
   const user = await current(userId);
@@ -44,7 +63,9 @@ const currentController = async (req, res) => {
 
 module.exports = {
   registrationController,
+  registrationResendController,
   loginController,
   logoutController,
   currentController,
+  verificationController,
 };

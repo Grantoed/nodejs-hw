@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema({
     type: String,
     default: null,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   avatarURL: String,
 });
 
